@@ -1,26 +1,22 @@
-const express=require("express");
-const bodyParser=require("body-parser");
-const app=express();
+const express                   =   require("express");
+const bodyParser                =   require("body-parser");
+const app                       =   express();
+const mongoose                  =   require("mongoose");
 
 app.set("view engine","ejs");
 
 app.use(bodyParser.urlencoded({extended:true}));
 
-// NAKLI DATABASE
-var element=[
-    {
-        name:"everest base camp",
-        img: "https://images.unsplash.com/photo-1492648272180-61e45a8d98a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-    },
-    {
-        name:"forest gump",
-        img: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-    },
-    {
-        name:"friend camp",
-        img: "https://images.unsplash.com/photo-1530541930197-ff16ac917b0e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-    }
-];
+// DB Config
+
+mongoose.connect("mongodb://localhost/yelpcampV1",{useNewUrlParser:true , useUnifiedTopology:true})
+
+var campSchema= new mongoose.Schema({
+    title: String,
+    img: String
+});
+
+var Camp=mongoose.model("Camp",campSchema);
 
 app.get("/",(req,res)=>{
     res.redirect("/landing");
@@ -31,8 +27,12 @@ app.get("/landing",(req,res)=>{
 });
 
 app.get("/campgrounds",(req,res)=>{
-    
-    res.render("campgrounds",{element:element});
+    Camp.find({},(err,camps)=>{
+        if(err){console.log(err);}
+        else{
+            res.render("campgrounds",{element:camps});
+        }
+    }) 
 });
 
 app.get("/campgrounds/new",(req,res)=>{
@@ -41,11 +41,16 @@ app.get("/campgrounds/new",(req,res)=>{
 
 app.post("/campgrounds",(req,res)=>{
     var camp={
-        name:req.body.name,
-        img:req.body.img
+        title : req.body.title,
+        img : req.body.img
     }
-    element.push(camp);
-    res.redirect("/campgrounds");
+    Camp.create(camp,(err,camp)=>{
+        if(err){
+            console.log(err);
+        }else{
+            res.redirect("/campgrounds");
+        }
+    })
 });
 
 app.listen(2020,()=>{
