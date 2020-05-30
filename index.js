@@ -13,7 +13,8 @@ mongoose.connect("mongodb://localhost/yelpcampV1",{useNewUrlParser:true , useUni
 
 var campSchema= new mongoose.Schema({
     title: String,
-    img: String
+    img: String,
+    description : String,
 });
 
 var Camp=mongoose.model("Camp",campSchema);
@@ -52,6 +53,15 @@ app.post("/campgrounds",(req,res)=>{
         }
     })
 });
+ 
+// show route
+
+app.get("/campgrounds/:id",(req,res)=>{
+    Camp.findById(req.params.id,(err,camp)=>{
+        res.render("show",{camp:camp});
+    })
+});
+
 
 app.listen(2020,()=>{
     console.log("server is running");
