@@ -22,3 +22,10 @@ Each campground has
 * Create a models directory
 * Use module.exports
 
+# Added comments model
+* adding comments model and linking with the user model
+
+# Seeding the Database
+* Adding seeding functionality
+* seeding :- first remove all the data from the database and add some dummy data in the db
+

@@ -2,7 +2,7 @@ const express                   =   require("express");
 const bodyParser                =   require("body-parser");
 const app                       =   express();
 const mongoose                  =   require("mongoose");
-
+var   seedDB                      =   require("./seed");                       
 app.set("view engine","ejs");
 
 app.use(bodyParser.urlencoded({extended:true}));
@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 // DB Config
 mongoose.connect("mongodb://localhost/yelpcampV1",{useNewUrlParser:true , useUnifiedTopology:true})
 var Camp=require("./models/CampGround");
-
+seedDB();
 
 app.get("/",(req,res)=>{
     res.redirect("/landing");
@@ -51,10 +51,22 @@ app.post("/campgrounds",(req,res)=>{
 // show route
 
 app.get("/campgrounds/:id",(req,res)=>{
-    Camp.findById(req.params.id,(err,camp)=>{
-        res.render("show",{camp:camp});
-    })
+    Camp.findById(req.params.id).populate("comments").exec((err,camp)=>{
+        if(err){
+            console.log(err);
+        }else{
+            res.render("show",{camp:camp});
+        }
+    });
+    // User.findOne({email:"abhijeetk698@gmail.com"}).populate("posts").exec((err,post)=>{
+    //     if(err){
+    //         console.log(err);
+    //     }else{
+    //         console.log(post);
+    //     }
+    // });
 });
+
 
 
 app.listen(2020,()=>{

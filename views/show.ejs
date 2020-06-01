@@ -1,2 +1,17 @@
 <h1> this is show route</h1>
-<%= camp.title%>
+<div>
+    <h4><%=camp.title %></h4>
+    <img src="<%=camp.img%>"> 
+    <p><strong>Description : </strong><%= camp.description %></p>
+    <% camp.comments.forEach((comment)=>{ %>
+    <hr>
+    <h3>Comments</h3>
+    <hr>
+    <div>
+        <hr>
+            <strong> <%=comment.author%></strong> : <%=comment.remark%> 
+        <hr>
+    </div>
+
+    <%})%>
+</div>
