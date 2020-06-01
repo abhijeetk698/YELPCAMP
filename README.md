@@ -17,3 +17,8 @@ Each campground has
 * Setup route to show form
 * Add basic unstyled form
 
+# Refactor Mongoose Code
+
+* Create a models directory
+* Use module.exports
+

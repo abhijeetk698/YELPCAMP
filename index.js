@@ -8,16 +8,9 @@ app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended:true}));
 
 // DB Config
-
 mongoose.connect("mongodb://localhost/yelpcampV1",{useNewUrlParser:true , useUnifiedTopology:true})
+var Camp=require("./models/CampGround");
 
-var campSchema= new mongoose.Schema({
-    title: String,
-    img: String,
-    description : String,
-});
-
-var Camp=mongoose.model("Camp",campSchema);
 
 app.get("/",(req,res)=>{
     res.redirect("/landing");
@@ -43,7 +36,8 @@ app.get("/campgrounds/new",(req,res)=>{
 app.post("/campgrounds",(req,res)=>{
     var camp={
         title : req.body.title,
-        img : req.body.img
+        img : req.body.img,
+        description:req.body.description
     }
     Camp.create(camp,(err,camp)=>{
         if(err){
