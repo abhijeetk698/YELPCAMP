@@ -29,3 +29,9 @@ Each campground has
 * Adding seeding functionality
 * seeding :- first remove all the data from the database and add some dummy data in the db
 
+# Comment new create model
+
+* Discuss nested routes
+* Add the comment new and create routes
+* Add the new commment form
+

@@ -1,0 +1,11 @@
+<%- include("../partials/header")%>
+
+<h1> Describe your comment for <%=camp.title%></h1>
+
+<form action="/campgrounds/<%=camp._id%>" method="POST">
+    <input type="text" placeholder="author" name="comment[author]">
+    <input type="text" placeholder="your comment" name="comment[remark]">
+    <button type="submit"> submit</button>
+</form>
+
+<%- include("../partials/footer")%>

@@ -1,12 +1,14 @@
+<%- include("../partials/header")%>
 <h1> this is show route</h1>
 <div>
     <h4><%=camp.title %></h4>
     <img src="<%=camp.img%>"> 
     <p><strong>Description : </strong><%= camp.description %></p>
-    <% camp.comments.forEach((comment)=>{ %>
     <hr>
     <h3>Comments</h3>
-    <hr>
+    <hr>    
+    <% camp.comments.forEach((comment)=>{ %>
+    
     <div>
         <hr>
             <strong> <%=comment.author%></strong> : <%=comment.remark%> 
@@ -14,4 +16,8 @@
     </div>
 
     <%})%>
+
+    <a href="/campgrounds/<%=camp._id%>/new" class="btn btn-primary">NEW COMMENT</a>
+
 </div>
+<%- include("../partials/footer")%>

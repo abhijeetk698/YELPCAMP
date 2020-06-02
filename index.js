@@ -2,14 +2,15 @@ const express                   =   require("express");
 const bodyParser                =   require("body-parser");
 const app                       =   express();
 const mongoose                  =   require("mongoose");
-var   seedDB                      =   require("./seed");                       
+const seedDB                    =   require("./seed");                       
 app.set("view engine","ejs");
 
 app.use(bodyParser.urlencoded({extended:true}));
 
 // DB Config
 mongoose.connect("mongodb://localhost/yelpcampV1",{useNewUrlParser:true , useUnifiedTopology:true})
-var Camp=require("./models/CampGround");
+const Camp      =   require("./models/CampGround");
+const Comment   =   require("./models/comments");
 seedDB();
 
 app.get("/",(req,res)=>{
@@ -24,13 +25,13 @@ app.get("/campgrounds",(req,res)=>{
     Camp.find({},(err,camps)=>{
         if(err){console.log(err);}
         else{
-            res.render("campgrounds",{element:camps});
+            res.render("camp/campgrounds",{element:camps});
         }
     }) 
 });
 
 app.get("/campgrounds/new",(req,res)=>{
-    res.render("new");
+    res.render("camp/new");
 })
 
 app.post("/campgrounds",(req,res)=>{
@@ -43,7 +44,7 @@ app.post("/campgrounds",(req,res)=>{
         if(err){
             console.log(err);
         }else{
-            res.redirect("/campgrounds");
+            res.redirect("camp/campgrounds");
         }
     })
 });
@@ -55,19 +56,42 @@ app.get("/campgrounds/:id",(req,res)=>{
         if(err){
             console.log(err);
         }else{
-            res.render("show",{camp:camp});
+            res.render("camp/show",{camp:camp});
         }
     });
-    // User.findOne({email:"abhijeetk698@gmail.com"}).populate("posts").exec((err,post)=>{
-    //     if(err){
-    //         console.log(err);
-    //     }else{
-    //         console.log(post);
-    //     }
-    // });
 });
 
+/******************
+ * COMMENT ROUTE * 
+ *******************/
 
+app.get("/campgrounds/:id/new",(req,res)=>{
+    Camp.findById(req.params.id,(err,camp)=>{
+        if(err){
+            console.log(err);
+        }else{
+            res.render("comment/new",{camp:camp});
+        }
+    })
+})
+
+app.post("/campgrounds/:id",(req,res)=>{
+    Comment.create(req.body.comment,(err,comment)=>{
+        if(err){
+            console.log(err);
+        }else{
+            Camp.findById(req.params.id,(err,camp)=>{
+                if(err){
+                    console.log(err);
+                }else{
+                    camp.comments.push(comment);
+                    camp.save();
+                    res.redirect(`/campgrounds/${req.params.id}`);
+                }
+            })
+        }
+    });
+});
 
 app.listen(2020,()=>{
     console.log("server is running");
