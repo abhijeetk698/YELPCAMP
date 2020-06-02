@@ -35,3 +35,15 @@ Each campground has
 * Add the comment new and create routes
 * Add the new commment form
 
+# Auth
+* Installing all packages needed for auth
+* Defining User Model
+* Configuring passport
+* Adding register routes
+* Adding register template
+* Adding login routes
+* Adding login template
+* Adding logout route
+* Preventing user from addding a comment if not logged in
+* 
+
